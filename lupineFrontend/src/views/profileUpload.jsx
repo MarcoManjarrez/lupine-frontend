@@ -9,10 +9,12 @@ const ProfileUpload = () =>{
           <div className="profileUploadContainer">
             <div className="profileUploadContainer__imageContainer">
                 <img src={LupineImage} alt="Placeholder profile picture"/>
-                <button>
+                <button className="profileUploadContainer__imageContainer__editButton">
                     <EditOutlined/>
                 </button>
             </div>
+            <h1>Correo</h1>
+            <input placeholder='ejemplo@correo.com'/>
             <h1>Nombre de usuario</h1>
             <input placeholder='Nombre de usuario'/>
             <h1>Contraseña</h1>

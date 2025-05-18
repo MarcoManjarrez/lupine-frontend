@@ -12,6 +12,12 @@
     &__imageContainer{
         display: flex;
         align-items: center;
+
+        &__editButton{
+            display: flex;
+            justify-content: center;
+        }
+
         img{
             border-radius: 50%;
             height:150px;
@@ -20,8 +26,8 @@
         }
         button{
             position: absolute;
-            top: 30%;
-            left: 55%;
+            top: 35%;
+            left: 54%;
             background-color: #555;
             color: white;
             border: none;
@@ -30,6 +36,7 @@
             height: 40px;
             width: 40px;
         }
+
     }
 
     h1{
