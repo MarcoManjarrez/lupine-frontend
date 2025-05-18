@@ -3,7 +3,7 @@ import lupineLogo from "../img/lupineLogo.png"
 import "../styles/login.scss"
 
 const Login = () => {
-
+  
   return (
     <>
       <div className='loginContainer'>
@@ -16,7 +16,7 @@ const Login = () => {
             <h2>Inicia Sesion</h2>
             <input placeholder='Usuario'/>
             <input placeholder='Contraseña'/>
-        </div>
+          </div>
         </div>
         <div className='loginContainer__registerContainer'>
           <h5>O registrate</h5>

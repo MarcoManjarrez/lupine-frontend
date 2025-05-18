@@ -1,0 +1,70 @@
+.chatRoomsContainer {
+    display: flex;
+    flex-direction: row; 
+    height: 90vh; 
+    width: 90vw;
+    position: relative;
+    border-radius: 12px;
+    top: -10px;
+    left: -170px;
+
+    .sidebar {
+        width: 330px;
+        background-color: #2a2a2a; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        h2, h3 {
+            margin: 3px;  
+            line-height: 1.1; 
+        } 
+
+        h1 {
+            font-size: 28px;
+            font-weight: 500;
+            color: white;
+        }
+        h2{
+            font-size: 24px;
+            font-weight: 500;
+            color: #3A4AB1;
+        }
+        h3{
+            margin-left:10px;
+            font-size: 12px;
+            font-weight: 200;
+            color: black;
+        }
+
+        .searchContainer {
+            input {
+                height: 30px;
+                width: 300px;
+                border-radius: 12px;
+                border: none;
+                padding: 0 12px;
+                margin: 12px;
+            }
+        }
+
+        .chatList {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+    }
+
+    .chatView {
+        flex-grow: 1;
+        background-color: #1e1e1e;
+        padding: 24px;
+        color: white;
+
+        h2 {
+            font-size: 24px;
+            color: #ccc;
+        }
+    }
+}

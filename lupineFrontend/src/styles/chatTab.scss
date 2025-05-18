@@ -1,0 +1,27 @@
+.chatTabContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #4a4a4a; 
+    width: 300px;
+    height: 80px;
+    overflow: hidden;
+
+    &__titleMessage{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex-grow: 1;
+    }
+
+    img{
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+   
+    
+}
