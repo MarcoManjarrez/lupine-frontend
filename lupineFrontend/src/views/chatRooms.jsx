@@ -2,6 +2,7 @@ import {useState} from "react";
 import lupineLogo from "../img/lupineLogo.png";
 import ChatTab from "../components/chatTab";
 import "../styles/chatRooms.scss";
+import { NavLink } from "react-router-dom";
 
 const ChatRooms = () =>{
     const chatRoomsTest = [
@@ -42,6 +43,9 @@ const ChatRooms = () =>{
         </div>
 
         <div className="chatView">
+            <NavLink to="/login">
+            <button onClick={{}}>Siguiente</button>
+            </NavLink>
             {/*Aqui va a ir el chat en si*/}
             <h2>Selecciona un chat para comenzar</h2>
         </div>

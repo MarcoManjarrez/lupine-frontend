@@ -1,4 +1,5 @@
 import {useState} from "react";
+import { NavLink } from "react-router-dom";
 import LupineImage from "../img/lupineImage.png";
 import { EditOutlined } from "@ant-design/icons";
 import "../styles/profileUpload.scss";
@@ -22,6 +23,9 @@ const ProfileUpload = () =>{
             <button>
                 Subir
             </button>
+            <NavLink to="/chatRooms">
+            <button onClick={{}}>Siguiente</button>
+            </NavLink>
           </div>
         </>
     );

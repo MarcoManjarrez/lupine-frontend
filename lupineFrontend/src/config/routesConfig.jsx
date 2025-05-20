@@ -1,17 +1,23 @@
 import React, {Suspense} from "react";
-import ProfileUpload from "../views/profileUpload";
-import ChatRooms from "../views/chatRooms";
 
 const ProfileUpload = React.lazy(() => import("../views/profileUpload"));
 const ChatRooms = React.lazy(() => import("../views/chatRooms"));
-
+const Login = React.lazy(()=> import("../views/login"));
 
 export const routesConfig = () => [
+    {
+        path: "/login",
+        element: (
+            <Suspense>
+                <Login /> 
+            </Suspense>
+        )
+    },
     {
         path: "/profileUpload",
         element: (
             <Suspense>
-                <ProfileUpload />
+                <ProfileUpload /> 
             </Suspense>
         )
     },

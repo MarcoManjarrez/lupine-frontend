@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import lupineLogo from "../img/lupineLogo.png"
 import "../styles/login.scss"
+
 
 const Login = () => {
   
@@ -22,6 +24,9 @@ const Login = () => {
           <h5>O registrate</h5>
           <button>Registrarse</button>
         </div>
+        <NavLink to="/profileUpload">
+        <button>Siguiente</button>
+        </NavLink>
       </div>
     </>
   )
