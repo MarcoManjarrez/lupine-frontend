@@ -1,18 +1,26 @@
-import {useState} from "react";
-import "../styles/chatTab.scss";
+"use client"
 
-const ChatTab = ({chatRoomName, chatRoomImage}) =>{
-    return(
-        <>
-          <div className="chatTabContainer">
-            <div className="chatTabContainer__titleMessage">
-                <h2>{chatRoomName}</h2>
-                <h3>ultimo mensaje</h3>
-            </div>
-                <img src={chatRoomImage}/>
-          </div>
-        </>
-    );
+import "../styles/chatTab.scss"
+
+const ChatTab = ({ chatRoom, isActive, onClick }) => {
+  const { chatRoomName, chatRoomImage, lastMessage, timestamp } = chatRoom
+
+  return (
+    <div className={`chatTabContainer ${isActive ? "active" : ""}`} onClick={onClick}>
+      <div className="chatTabContainer__avatar">
+        <img src={chatRoomImage || "/placeholder.svg"} alt={chatRoomName} />
+      </div>
+
+      <div className="chatTabContainer__titleMessage">
+        <h2>{chatRoomName}</h2>
+        <h3>{lastMessage || "No messages yet"}</h3>
+      </div>
+
+      {timestamp && <div className="chatTabContainer__timestamp">{timestamp}</div>}
+
+      <div className="chatTabContainer__unread"></div>
+    </div>
+  )
 }
 
-export default ChatTab;
+export default ChatTab
