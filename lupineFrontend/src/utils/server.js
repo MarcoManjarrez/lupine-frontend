@@ -2,42 +2,55 @@ import axios from 'axios';
 import { rootEndpoint } from './constant';
 
 export const endpoints ={
-    login: {
+    validateUser: {
         route: "login",
         method: "post"
     }, 
-    signin:{
-        route: "logout",
+    createUser:{
+        route: "createUser",
         method: "post"
     },
     logout: {
         route: "logout",
         method: "post",
     },
-    chat: {
-        route: "chat",
-        method: "get"
-    }, 
-    chats:{
-        route: "chats",
-        method: "get"
+    getUserInfo: {
+        route: "getUserInfo",
+        method: "get",
     },
-    addToChat: {
-        route: "addToChat",
-        method: "post",
+    getAllUsers: {
+        route: "getAllUsers",
+        method: "get",
     },
     createChat: {
         route: "createChat",
-        method: "post"
-    }, 
-    message:{
-        route: "message",
-        method: "post"
-    },
-    leaveChat: {
-        route: "leaveChat",
         method: "post",
     },
+    addToGroupChat: {
+        route: "addToGroupCHat",
+        method: "post",
+    },
+    sendMessage: {
+        route: "sendMessage",
+        method: "post",
+    },
+    getChats: {
+        route: "getChats",
+        method: "get",
+    },
+    getChatMessages: {
+        route: "getChatMessages",
+        method: "get",
+    },
+    deleteFromChat: {
+        route: "deleteFromChat",
+        method: "delete",
+    },
+    deleteChat: {
+        route: "createChat",
+        method: "post",
+    },
+    
 };
 
 const server = async (endpoint, method, params = {}, body = {}) => {

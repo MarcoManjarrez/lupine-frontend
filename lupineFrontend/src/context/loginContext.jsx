@@ -9,6 +9,8 @@ export const LoginProvider = ({children}) =>{
 
     const authContext = useContext(AuthContext);
 
+    const [userInfo, setUserInfo] = useState();
+
     if (!authContext) {
         throw new Error('LoginProvider must be wrapped in AuthProvider');
     }
@@ -16,35 +18,68 @@ export const LoginProvider = ({children}) =>{
     const { loggedIn, setLoggedIn } = authContext;
     const navigate = useNavigate();
 
-    const LoginCall = useCallback(async (username, password) =>{
+    const ValidateUser = useCallback(async (username, password) =>{
         try{
             const res = await server(
-                endpoints.login.route, 
-                endpoints.login.method,
-                { username: username, password: password}
+                endpoints.validateUser.route, 
+                endpoints.validateUser.method,
+                {username: username, password: password, email: "holamundo@mundo2.com"}
             );
-            if(res.message){
+            if(res.response_code === 200){
                 setLoggedIn(true);
                 navigate("/chatRooms");
             }
-        } catch (error_message) {
-            console.error(error_message);
+            console.log(res.response_code);
+        } catch (error) {
+            console.error(error);
         }
     }, [navigate, setLoggedIn]);
+
+     const CreateUser = useCallback(async (username, email, password) =>{
+        try{
+            const res = await server(
+                endpoints.createUser.route, 
+                endpoints.createUser.method,
+                {username: username, email: email, password: password}
+            );
+            if(res.response_code === 200){
+                setLoggedIn(true);
+                navigate("/chatRooms");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
+
+    const GetUserInfo = (async (key) =>{
+        try{
+            const res = await server(
+                endpoints.getUserInfo.route,
+                endpoints.getUserInfo.method,
+                {key: key, token:token}
+            );
+            console.log(res);
+            if(res.response_code === 200){
+                setUserInfo(res);
+            }
+        } catch (error){
+            console.error(error);
+        }
+    });
 
     const LogoutCall = useCallback(async (username, password) =>{
         try{
             const res = await server(
                 endpoints.logout.route, 
                 endpoints.logout.method,
-                { username: username, password: password}
+                {username: username, password: password}
             );
             if(res.message){
                 setLoggedIn(false);
                 navigate("/chatRooms");
             }
-        } catch (error_message) {
-            console.error(error_message);
+        } catch (error) {
+            console.error(error);
         }
     }, []);
 
@@ -53,24 +88,9 @@ export const LoginProvider = ({children}) =>{
         navigate(path);
     }, [navigate]);
 
-    const SignInCall = useCallback(async (username, email, password) =>{
-        try{
-            const res = await server(
-                endpoints.logout.route, 
-                endpoints.logout.method,
-                { operation_type: 0, username: username, email: email, password: password}
-            );
-            if(res.message){
-                setLoggedIn(true);
-                navigate("/chatRooms");
-            }
-        } catch (error_message) {
-            console.error(error_message);
-        }
-    }, []);
 
     return(
-        <LoginContext.Provider value={{ LoginCall, LogoutCall, SignInCall, navigateTo }}>
+        <LoginContext.Provider value={{ ValidateUser, CreateUser, LogoutCall, navigateTo, userInfo, setUserInfo, GetUserInfo }}>
             {children}
         </LoginContext.Provider>
     );

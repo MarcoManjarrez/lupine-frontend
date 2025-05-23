@@ -5,58 +5,60 @@ export const ChatRoomsContext = createContext();
 
 export const ChatRoomsProvider = ({children}) =>{
 
-    const [chat, setChat] = useState({});
+    const [chatMessage, setChatMessage] = useState({});
     const [chats, setChats] = useState({});
     
-    const GetChat = useCallback(async (userId, destination, chatId, lastUpdate) =>{
+    const GetChatMessages = useCallback(async (chatId, lastUpdate) =>{
         try{
             const res = await server(
-                endpoints.getChat.route,
-                endpoints.getChat.method,
-                {operation_type: 0, user_id: userId, destination: destination, 
-                chat_id: chatId, last_update: lastUpdate}
+                endpoints.getChatMessages.route,
+                endpoints.getChatMessages.method,
+                {chat_id: chatId, last_update: lastUpdate}
             ); 
-            if(res.message){
-                setChat(res);
+            if(res.response_code === 200){
+                setChatMessage(res);
             }
-        } catch (error_message){
-            console.log(error_message);
+        } catch (error){
+            console.log(error);
         }
       },[]);
 
     const GetChats = useCallback(async (userId, lastUpdate) =>{
         try{
+            let token = localStorage.getItem("auth");
             const res = await server(
                 endpoints.getChats.route,
                 endpoints.getChats.method,
-                {operation_type: 0, user_id: userId, last_update: lastUpdate}
+                {user_id: userId, last_update: lastUpdate, token: token}
             ); 
-            if(res.message){
+            if(res.response_code === 200){
                 setChats(res);
             }
-        } catch (error_message){
-            console.log(error_message);
+        } catch (error){
+            console.log(error);
         }
       },[]);
 
-    const AddToChat = useCallback(async (adminId, userId) =>{
+    const AddToChat = useCallback(async (chatId, addedBy, participantIds ) =>{
         try{
+            let token = localStorage.getItem("auth");
             const res = await server(
-                endpoints.getChats.route,
-                endpoints.getChats.method,
-                {operation_type: 0, admin_id: adminId, userId: userId}
+                endpoints.addToChat.route,
+                endpoints.addToChat.method,
+                {chat_id: chatId, added_by: addedBy, participant_ids: participantIds, token: token}
             ); 
-        } catch (error_message){
+            console.log(res);
+        } catch (error){
             console.log(error_message);
         }
       },[]);
 
-    const CreateGroupChat = useCallback(async (adminId, chatName, participantIds) =>{
+    const CreateGroupChat = useCallback(async (chatName, createdBy) =>{
         try{
             const res = await server(
-                endpoints.getChats.route,
-                endpoints.getChats.method,
-                {operation_type: 0, admin_id: adminId, chat_name: chatName, participant_ids: participantIds}
+                endpoints.createGroupChat.route,
+                endpoints.createGroupChat.method,
+                {is_group: true, chat_name: chatName, created_by: createdBy}
             ); 
         } catch (error_message){
             console.log(error_message);
@@ -66,9 +68,9 @@ export const ChatRoomsProvider = ({children}) =>{
     const SendMessage = useCallback(async (userId, message) =>{
         try{
             const res = await server(
-                endpoints.getChats.route,
-                endpoints.getChats.method,
-                {operation_type: 0, user_id: userId, message: message}
+                endpoints.sendMessage.route,
+                endpoints.sendMessage.method,
+                {user_id: userId, message: message}
             ); 
         } catch (error_message){
             console.log(error_message);
@@ -78,17 +80,20 @@ export const ChatRoomsProvider = ({children}) =>{
     const LeaveChat = useCallback(async (userId, chatId) =>{
         try{
             const res = await server(
-                endpoints.getChats.route,
-                endpoints.getChats.method,
-                {operation_type: 0, user_id: userId, chat_id: chat_id}
+                endpoints.leaveChat.route,
+                endpoints.leaveChat.method,
+                {user_id: userId, chat_id: chatId}
             ); 
+            if(res.response_code === 200){
+                console.log(res);
+            }
         } catch (error_message){
             console.log(error_message);
         }
       } ,[]);
 
     return(
-        <ChatRoomsContext.Provider value={{ chat, setChat, GetChat, chats, setChats, GetChats, AddToChat, CreateGroupChat, SendMessage, LeaveChat}}>
+        <ChatRoomsContext.Provider value={{ chatMessage, setChatMessage, GetChatMessages, chats, setChats, GetChats, AddToChat, CreateGroupChat, SendMessage, LeaveChat}}>
             {children}
         </ChatRoomsContext.Provider>
     );

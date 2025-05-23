@@ -6,18 +6,13 @@ import "../styles/login.scss"
 import { LoginContext } from "../context/loginContext"
 
 const Login = () => {
-  const { LoginCall, navigateTo } = useContext(LoginContext)
+  const { ValidateUser, navigateTo } = useContext(LoginContext)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   const handleLogin = (e) => {
     e.preventDefault()
-    LoginCall(username, password)
-  }
-
-  const handleEnter = (e) => {
-    e.preventDefault()
-    navigateTo("/chatRooms")
+    ValidateUser(username, password)
   }
 
   const handleRegister = (e) => {
@@ -46,7 +41,7 @@ const Login = () => {
       </form>
 
       <div className="loginContainer__registerContainer">
-        <button onClick={handleEnter}>Entrar</button>
+        <button onClick={handleLogin}>Entrar</button>
         <h5>O regístrate</h5>
         <button onClick={handleRegister}>Registrarse</button>
       </div>
