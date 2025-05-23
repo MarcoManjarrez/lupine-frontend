@@ -2,8 +2,8 @@ const net = require("net");
 const dgram = require("dgram");
 
 const BALANCERS = [
-  // { host: "14.0.10.2", tcpPort: 5000, udpPort: 5001 },
-  // { host: "143.104.150.2", tcpPort: 5000, udpPort: 5001 },
+  // { host: "10.7.29.169", tcpPort: 8080, udpPort: 5001 }, //emi
+  // { host: "10.7.3.231", tcpPort: 3001, udpPort: 3001 }, //pepe
   { host: "127.0.0.1", tcpPort: 5000, udpPort: 5001 },
   // Agrega más si lo necesitas
 ];
@@ -12,7 +12,7 @@ exports.sendTcpMessage = async function (message) {
   for (const balancer of BALANCERS) {
     try {
       const response = await trySendTcp(message, balancer.host, balancer.tcpPort);
-      return response; // Retorna en cuanto uno responde bien
+      return response; 
     } catch (err) {
       console.warn(`TCP falló con ${balancer.host}:${balancer.tcpPort} - ${err.message}`);
       continue;
@@ -25,7 +25,7 @@ function trySendTcp(message, host, port) {
   return new Promise((resolve, reject) => {
     const client = new net.Socket();
 
-    client.setTimeout(3000); // timeout de 3 segundos por si está caído
+    client.setTimeout(3000); 
 
     client.connect(port, host, () => {
       client.write(message);
@@ -33,7 +33,7 @@ function trySendTcp(message, host, port) {
 
     client.on("data", (data) => {
       resolve(data.toString());
-      client.destroy(); // cerrar conexión
+      client.destroy(); 
     });
 
     client.on("error", (err) => {
@@ -82,7 +82,6 @@ function trySendUdp(message, host, port) {
       reject(err);
     });
 
-    // Timeout por si no responde
     setTimeout(() => {
       if (!responded) {
         client.close();
@@ -90,4 +89,15 @@ function trySendUdp(message, host, port) {
       }
     }, 3000);
   });
+}
+
+exports.sendMsg = async function(params, action){
+  if (action != 99){
+    params.action = action
+    const message = JSON.stringify(params)
+    result = await sendTcpMessage(message)
+    return JSON.parse(result)
+  }
+  return null
+
 }
