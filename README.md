@@ -1,7 +1,4 @@
 # Lupine
-
-**Repositorio:** lupine-frontend
-
 ## Descripción
 
 Aplicación de ChatRooms donde los usuarios se pueden registrar y crear chats con distintos usuarios, enviar mensajes, eliminar usuarios y eliminar chats.
@@ -15,6 +12,44 @@ Este repositorio se enfoca en uno de los frontend de la aplicación. Proyecto en
 - **Frontend:** React + Vite, Lucide, Scss
 - **Proxy:** Node.js + Express
 - **Comunicación:** Sockets, (TCP, UDP)
+
+## Para correr el proyecto
+
+### Frontend
+```bash
+cd .\lupineFrontend\
+npm i
+npm run dev
+```
+
+### Proxy
+```bash
+cd .\proxy\
+npm i
+nodemon index.js
+```
+
+## Estructura del proyecto
+
+```
+lupineFrontend/
+├── src/
+│   ├── components/
+│   ├── config/
+│   ├── img/
+│   ├── styles/
+│   ├── views/
+│   ├── App.jsx
+│   ├── main.jsx
+├── index.html
+
+proxy/
+├── chats.js
+├── index.js
+├── io.js
+├── socketClient.js
+├── users.js
+```
 
 Está construido con React + Vite y se organiza mediante el uso de Context API para la gestión del estado global y React Router Dom para la navegación entre las diferentes vistas de la aplicación.
 
@@ -56,43 +91,12 @@ Como parte del proxy, el archivo socketClient.js es fundamental para la comunica
 
 **Manejo de Errores y Timeouts:** Ambas funciones (trySendTcp, trySendUdp) incluyen lógica para manejar errores de conexión y timeouts (3 segundos), lo que asegura la resiliencia de la comunicación.
 
-## Para correr el proyecto
+## Protocolo de comunicación (JSON)
 
-### Frontend
-```bash
-cd .\lupineFrontend\
-npm i
-npm run dev
-```
+- Toda la comunicación entre cliente y servidor está basada en el formato JSON.
+- Se exige el campo "action" como entero, que representa el tipo de operación solicitada (ej. PING, CREATE_USER, SEND_MESSAGE).
+- Si el JSON está mal formado o falta un campo esencial, se responde con un mensaje de error también en formato JSON.
 
-### Proxy
-```bash
-cd .\proxy\
-npm i
-nodemon index.js
-```
-
-## Estructura del proyecto
-
-```
-lupineFrontend/
-├── src/
-│   ├── components/
-│   ├── config/
-│   ├── img/
-│   ├── styles/
-│   ├── views/
-│   ├── App.jsx
-│   ├── main.jsx
-├── index.html
-
-proxy/
-├── chats.js
-├── index.js
-├── io.js
-├── socketClient.js
-├── users.js
-```
 
 ## Integrantes del equipo
 
@@ -100,9 +104,3 @@ Nombres en github:
 - Santiago Arreola Mungia - **sarreolam**
 - Marco Antonio Manjarrez Fernandez - **MarcoManjarrez**
 - Luis Felipe Organista Méndez - **Organistaf**
-
-## Protocolo de comunicación (JSON)
-
-- Toda la comunicación entre cliente y servidor está basada en el formato JSON.
-- Se exige el campo "action" como entero, que representa el tipo de operación solicitada (ej. PING, CREATE_USER, SEND_MESSAGE).
-- Si el JSON está mal formado o falta un campo esencial, se responde con un mensaje de error también en formato JSON.
