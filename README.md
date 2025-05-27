@@ -7,6 +7,7 @@ Este repositorio se enfoca en uno de los frontend de la aplicación. Proyecto en
 
 ## Arquitectura
 
+
 ### Tecnologías utilizadas
 
 - **Frontend:** React + Vite, Lucide, Scss
@@ -71,6 +72,44 @@ La aplicación hace un uso extensivo del Context API de React para manejar el es
 
 Se utiliza la librería de npm "axios" para llamar al proxy, si se hostean en computadoras diferentes se tiene que cambiar la constante rootEndpoint() para apuntar a la IP de la computadora que tenga el proxy.
 
+```javascript
+const server = async (endpoint, method, params = {}, body = {}) => {
+    const auth = localStorage.getItem("auth");
+    const res = await axios[method](`${rootEndpoint()}/${endpoint}`, { params, headers: { authorization: auth , 'Content-Type': 'application/json', 'Accept': 'application/json'}  });
+     return res;
+    }
+
+exports.login = async function (req, res) {  
+  const data = sendMsg(req.query, 0)
+  return IO.throwResult(res, {message: "Log in", data: data})
+}
+
+exports.sendMsg = async function(params, action){
+  if (action != 99){
+    params.action = action
+    const message = JSON.stringify(code(params))
+    result = await sendTcpMessage(message)
+    return JSON.parse(decode(result))
+  }
+  return null
+}
+```
+
+exports.login = async function (req, res) {  //validate user
+ const data = sendMsg(req.query, 0)
+ return IO.throwResult(res, {message: "Log in", data: data})
+}
+exports.sendMsg = async function(params, action){
+ if (action != 99){
+   params.action = action
+   const message = JSON.stringify(code(params))
+   result = await sendTcpMessage(message)
+   return JSON.parse(decode(result))
+ }
+ return null
+}
+
+
 ### Dentro del proxy
 
 Se manda a llamar cada endpoint con esta lógica, cambiar el mensaje a texto con cada acción requerida
@@ -78,6 +117,22 @@ Se manda a llamar cada endpoint con esta lógica, cambiar el mensaje a texto con
 El archivo server.js centraliza todas las llamadas al backend a través del proxy.
 
 **Endpoints:** Un objeto que define todas las rutas disponibles en el backend (login, createUser, logout, getUserInfo, getAllUsers, createChat, addToGroupChat, sendMessage, getChats, getChatMessages, deleteFromChat, deleteChat). Cada endpoint especifica su ruta y el método HTTP (post, get, delete).
+
+```javascript
+exports.login = async function (req, res) {  //validate user
+ const data = sendMsg(req.query, 0)
+ return IO.throwResult(res, {message: "Log in", data: data})
+}
+exports.sendMsg = async function(params, action){
+ if (action != 99){
+   params.action = action
+   const message = JSON.stringify(code(params))
+   result = await sendTcpMessage(message)
+   return JSON.parse(decode(result))
+ }
+ return null
+}
+```
 
 ### Comunicación TCP/UDP
 
