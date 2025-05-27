@@ -7,6 +7,14 @@ Este repositorio se enfoca en uno de los frontend de la aplicación. Proyecto en
 
 ## Arquitectura
 
+```mermaid
+graph LR
+    A[Frontend vite-react] --> D[Proxy Nodejs]
+    B[Frontend vite-react] --> D
+    C[Frontend vite-react] --> D
+    D --> E[Load Balancer]
+    D --> F[Load Balancer]
+```
 
 ### Tecnologías utilizadas
 
