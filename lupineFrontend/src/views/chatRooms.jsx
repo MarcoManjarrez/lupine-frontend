@@ -1,17 +1,19 @@
 "use client"
 
-import { useContext, useState } from "react"
-import user from "../img/user.png"
-import ChatTab from "../components/ChatTab"
-import "../styles/chatRooms.scss"
-import { NavLink } from "react-router-dom"
-import { ChatRoomsContext } from "../context/chatRoomsContext"
-import { MessageSquare, Search, PaperclipIcon, SendIcon } from "lucide-react"
+import { useContext, useState } from "react";
+import user from "../img/user.png";
+import ChatTab from "../components/ChatTab";
+import CreateChatModal from "../components/createChatModal";
+import "../styles/chatRooms.scss";
+import { NavLink } from "react-router-dom";
+import { ChatRoomsContext } from "../context/chatRoomsContext";
+import { MessageSquare, Search, PaperclipIcon, SendIcon, Plus } from "lucide-react";
 
 const ChatRooms = () => {
-  const { getChat } = useContext(ChatRoomsContext)
-  const [activeChat, setActiveChat] = useState(null)
-  const [message, setMessage] = useState("")
+  const { getChat } = useContext(ChatRoomsContext);
+  const [activeChat, setActiveChat] = useState(null);
+  const [message, setMessage] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const chatRoomsTest = [
     {
@@ -52,10 +54,26 @@ const ChatRooms = () => {
     setMessage("")
   }
 
+  const handleCreateModalOpen = () => {
+    setIsCreateModalOpen(true);
+  } 
+
+  const handleCreateModalClose = () => {
+    setIsCreateModalOpen(false);
+  } 
+
+  const handleCreateModalSend = () => {
+    setIsCreateModalOpen(false);
+    //llamar server
+  } 
+
   return (
     <div className="chatRoomsContainer">
       <div className="sidebar">
-        <h1>Chats</h1>
+        <div className="sidebar__textContainer">
+          <h1>Chats</h1>
+          <button onClick={handleCreateModalOpen}><Plus /></button>
+        </div>
         <div className="searchContainer">
           <div className="search-input">
             <Search className="search-icon" size={16} />
@@ -134,6 +152,7 @@ const ChatRooms = () => {
           </div>
         )}
       </div>
+      {isCreateModalOpen ? (<CreateChatModal handleCreateModalClose={handleCreateModalClose} handleCreateModalSend={handleCreateModalSend}/>) : null}
     </div>
   )
 }

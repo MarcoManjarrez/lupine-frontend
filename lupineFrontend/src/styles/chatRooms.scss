@@ -14,13 +14,28 @@
     border-right: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     flex-direction: column;
+
+    &__textContainer{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+      button{
+        display: flex;
+        justify-items: center;
+        align-items: center;
+        height: 5vh;
+        width: 5vh;
+        margin-top: 1vh;
+      }
+    }
     
     h1 {
       padding: 20px;
       font-size: 20px;
       font-weight: 700;
       color: $text-brightest;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
     
     .searchContainer {
