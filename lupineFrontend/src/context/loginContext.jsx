@@ -43,7 +43,7 @@ export const LoginProvider = ({children}) =>{
                 {username: username, email: email, password: password}
             );
             console.log(res)
-            if(res.response_code === 200){
+            if(res.data.response_code === 200){
                 setLoggedIn(true);
                 navigate("/chatRooms");
             }

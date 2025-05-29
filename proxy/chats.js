@@ -1,5 +1,5 @@
 const IO = require("./IO");
-const { sendTcpMessage } = require("./socketClient");
+const { sendMsg } = require("./socketClient");
 
 exports.insertCharGroup = async function (req, res) {  //create chat 
   const data = await sendMsg(req.query, 4)

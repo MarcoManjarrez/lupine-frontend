@@ -9,7 +9,6 @@ exports.login = async function (req, res) {  //validate user
 
 exports.createUser = async function (req, res) { //create user
   const data = await sendMsg(req.query, 2)
-  console.log(data)
   return IO.throwResult(res, {message: "Create User", data: data})
 }
 

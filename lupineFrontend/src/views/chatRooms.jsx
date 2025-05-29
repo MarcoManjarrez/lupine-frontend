@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useState } from "react";
+import { useContext, useState, useRef, useEffect} from "react";
 import user from "../img/user.png";
 import ChatTab from "../components/ChatTab";
 import CreateChatModal from "../components/createChatModal";
@@ -8,10 +8,11 @@ import "../styles/chatRooms.scss";
 import { NavLink } from "react-router-dom";
 import { ChatRoomsContext } from "../context/chatRoomsContext";
 import { MessageSquare, Search, PaperclipIcon, SendIcon, Plus } from "lucide-react";
+import MessageBubble from "../components/messageBubble";
 
 const ChatRooms = () => {
-  const { getChat } = useContext(ChatRoomsContext);
-  const [activeChat, setActiveChat] = useState(null);
+  const { GetChats, SendMessage, chatMessage,  GetChatMessages} = useContext(ChatRoomsContext);
+  const [activeChat, setActiveChat] = useState();
   const [message, setMessage] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
@@ -40,7 +41,7 @@ const ChatRooms = () => {
   ]
 
   const messagesEndRef = useRef(null)
-  const currentUserId = 1
+  const currentUserId = 2
   const [chatTest, setChatTest] = useState([
     {
       message_id: 1,
@@ -62,9 +63,11 @@ const ChatRooms = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [chatTest, activeChat])
+  }, [chatMessage, activeChat])
 
   const handleChatSelect = (chat) => {
+
+    GetChatMessages(chat.id)
     setActiveChat(chat)
     // Here you would typically call getChat(chat.id) to fetch messages
   }
@@ -75,20 +78,23 @@ const ChatRooms = () => {
     // Here you would send the message to your backend
     console.log(`Sending message to ${activeChat.chatRoomName}: ${message}`)
 
-    setChatTest((prev) => [
-      ...prev,
-      {
-        message_id: 1, // o un uuid
-        sender_id: 1,
-        sender_username: "username1",
-        content: message,
-        message_type: "text",
-        created_at: new Date().toISOString(),
-      },
-    ])
+    SendMessage(activeChat.id, message)
+
+    // setChatTest((prev) => [
+    //   ...prev,
+    //   {
+    //     message_id: 1, // o un uuid
+    //     sender_id: 1,
+    //     sender_username: "username1",
+    //     content: message,
+    //     message_type: "text",
+    //     created_at: new Date().toISOString(),
+    //   },
+    // ])
 
     // Clear the input
     setMessage("")
+    GetChatMessages(activeChat.id)
   }
 
   const handleCreateModalOpen = () => {
@@ -160,12 +166,12 @@ const ChatRooms = () => {
             </div>
 
             <div className="chat-messages">
-              {chatTest.length === 0 ? (
+              {chatMessage.length === 0 ? (
                 <div className="empty-message">
                   <p>No hay mensajes aún. Comienza la conversación.</p>
                 </div>
               ) : (
-                chatTest.map((msg) => (
+                chatMessage.map((msg) => (
                   <MessageBubble
                     key={msg.message_id}
                     sender_id={msg.sender_id}

@@ -1,22 +1,24 @@
 import { createContext, useState, useCallback } from "react";
-import { endpoints } from "../utils/server";
+import server, { endpoints } from "../utils/server";
 
 export const ChatRoomsContext = createContext();
 
 export const ChatRoomsProvider = ({children}) =>{
 
-    const [chatMessage, setChatMessage] = useState({});
-    const [chats, setChats] = useState({});
+    const [chatMessage, setChatMessage] = useState([]);
+    const [chats, setChats] = useState([]);
     
     const GetChatMessages = useCallback(async (chatId, lastUpdate) =>{
         try{
             const res = await server(
                 endpoints.getChatMessages.route,
                 endpoints.getChatMessages.method,
-                {chat_id: chatId, last_update: lastUpdate}
+                {chat_id: chatId, last_update_timestamp: "2023-01-01 00:00:00", token: "Buenas"}
             ); 
-            if(res.response_code === 200){
-                setChatMessage(res);
+            console.log(res)    
+            if(res.data.response_code === 200){
+                console.log(res.data.messages_array)
+                setChatMessage(res.data.messages_array);
             }
         } catch (error){
             console.log(error);
@@ -65,13 +67,15 @@ export const ChatRoomsProvider = ({children}) =>{
         }
       },[]);
 
-    const SendMessage = useCallback(async (userId, message) =>{
+    const SendMessage = useCallback(async (chat_id, message) =>{
         try{
             const res = await server(
                 endpoints.sendMessage.route,
                 endpoints.sendMessage.method,
-                {user_id: userId, message: message}
+                {sender_id: 2, content: message, chat_id: chat_id, message_type : "text", token: "pepe se la come"}
             ); 
+            console.log(res)
+            GetChatMessages(chat_id)
         } catch (error_message){
             console.log(error_message);
         }
