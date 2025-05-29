@@ -1,21 +1,19 @@
-@import './variables.scss';
-
 .chatTabContainer {
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  border-radius: $border-radius-sm;
+  border-radius: 4px;;
   cursor: pointer;
-  transition: background-color $transition-fast;
+  transition: background-color 0.15s ease;
   margin-bottom: 2px;
   position: relative;
   
   &:hover {
-    background-color: rgba($primary-color, 0.1);
+    background-color: rgba(#5865f2, 0.1);
   }
   
   &.active {
-    background-color: rgba($primary-color, 0.2);
+    background-color: rgba(#5865f2, 0.2);
   }
   
   &__titleMessage {
@@ -26,7 +24,7 @@
     h2 {
       font-size: 15px;
       font-weight: 600;
-      color: $text-brightest;
+      color: #ffffff;
       margin: 0 0 4px 0;
       white-space: nowrap;
       overflow: hidden;
@@ -36,7 +34,7 @@
     h3 {
       font-size: 13px;
       font-weight: 400;
-      color: $text-medium;
+      color: rgba(255, 255, 255, 0.6);
       margin: 0;
       white-space: nowrap;
       overflow: hidden;
@@ -49,7 +47,7 @@
     top: 12px;
     right: 16px;
     font-size: 12px;
-    color: $text-dim;
+    color: rgba(255, 255, 255, 0.4);
   }
   
   &__avatar {
@@ -62,7 +60,7 @@
     img {
       width: 100%;
       height: 100%;
-      border-radius: $border-radius-round;
+      border-radius: 50%;
       object-fit: cover;
     }
   }
@@ -74,6 +72,6 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: $success-color;
+    background-color: #43b581;
   }
 }
