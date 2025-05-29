@@ -3,12 +3,12 @@ const dgram = require("dgram");
 
 const BALANCERS = [
   // { host: "10.7.29.169", tcpPort: 8080, udpPort: 5001 }, //emi
-  // { host: "10.7.3.231", tcpPort: 3001, udpPort: 3001 }, //pepe
+  { host: "10.7.27.134", tcpPort: 3000, udpPort: 3001 }, //pepe
   { host: "127.0.0.1", tcpPort: 5000, udpPort: 5001 },
   // Agrega más si lo necesitas
 ];
 
-exports.sendTcpMessage = async function (message) {
+sendTcpMessage = async function (message) {
   for (const balancer of BALANCERS) {
     try {
       const response = await trySendTcp(message, balancer.host, balancer.tcpPort);
@@ -18,6 +18,7 @@ exports.sendTcpMessage = async function (message) {
       continue;
     }
   }
+  // return "{response_code: 503, response_text: 'No load Balancers found'}"
   throw new Error("Ningún balanceador TCP está disponible.");
 }
 
@@ -48,7 +49,7 @@ function trySendTcp(message, host, port) {
   });
 }
 
-exports.sendUdpMessage = async function(message) {
+sendUdpMessage = async function(message) {
   for (const balancer of BALANCERS) {
     try {
       const response = await trySendUdp(message, balancer.host, balancer.udpPort);
@@ -95,7 +96,9 @@ exports.sendMsg = async function(params, action){
   if (action != 99){
     params.action = action
     const message = JSON.stringify(params)
-    result = await sendTcpMessage(message)
+    console.log(message)
+    const result = await sendTcpMessage(message)
+    console.log(result)
     return JSON.parse(result)
   }
   return null
