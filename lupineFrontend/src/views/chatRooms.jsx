@@ -39,6 +39,31 @@ const ChatRooms = () => {
     },
   ]
 
+  const messagesEndRef = useRef(null)
+  const currentUserId = 1
+  const [chatTest, setChatTest] = useState([
+    {
+      message_id: 1,
+      sender_id: 1,
+      sender_username: "username1",
+      content: "Hola a todos!",
+      message_type: "text",
+      created_at: "2025-01-01 12:00:00",
+    },
+    {
+      message_id: 2,
+      sender_id: 2,
+      sender_username: "Pepe",
+      content: "¡Hola! ¿Qué tal?",
+      message_type: "text",
+      created_at: "2025-01-01 12:01:00",
+    },
+  ]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [chatTest, activeChat])
+
   const handleChatSelect = (chat) => {
     setActiveChat(chat)
     // Here you would typically call getChat(chat.id) to fetch messages
@@ -49,6 +74,18 @@ const ChatRooms = () => {
 
     // Here you would send the message to your backend
     console.log(`Sending message to ${activeChat.chatRoomName}: ${message}`)
+
+    setChatTest((prev) => [
+      ...prev,
+      {
+        message_id: 1, // o un uuid
+        sender_id: 1,
+        sender_username: "username1",
+        content: message,
+        message_type: "text",
+        created_at: new Date().toISOString(),
+      },
+    ])
 
     // Clear the input
     setMessage("")
@@ -123,10 +160,22 @@ const ChatRooms = () => {
             </div>
 
             <div className="chat-messages">
-              {/* Here you would map through messages */}
-              <div className="empty-message">
-                <p>No hay mensajes aún. Comienza la conversación.</p>
-              </div>
+              {chatTest.length === 0 ? (
+                <div className="empty-message">
+                  <p>No hay mensajes aún. Comienza la conversación.</p>
+                </div>
+              ) : (
+                chatTest.map((msg) => (
+                  <MessageBubble
+                    key={msg.message_id}
+                    sender_id={msg.sender_id}
+                    sender_username={msg.sender_username}
+                    content={msg.content}
+                    currentUserId={currentUserId}
+                  />
+                ))
+              )}
+              <div ref={messagesEndRef} />
             </div>
 
             <div className="chat-input">

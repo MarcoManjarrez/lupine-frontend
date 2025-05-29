@@ -8,14 +8,14 @@ import { LoginContext } from "../context/loginContext"
 import "../styles/profileUpload.scss"
 
 const ProfileUpload = () => {
-  const { SignInCall } = useContext(LoginContext)
+  const { CreateUser } = useContext(LoginContext)
   const [email, setEmail] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   const handleSignInCall = (e) => {
     e.preventDefault()
-    SignInCall(username, email, password)
+    CreateUser(username, email, password)
   }
 
   return (

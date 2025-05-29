@@ -23,7 +23,7 @@ export const LoginProvider = ({children}) =>{
             const res = await server(
                 endpoints.validateUser.route, 
                 endpoints.validateUser.method,
-                {username: username, password: password, email: "holamundo@mundo2.com"}
+                {username: username, password: password}
             );
             if(res.response_code === 200){
                 setLoggedIn(true);
@@ -42,6 +42,7 @@ export const LoginProvider = ({children}) =>{
                 endpoints.createUser.method,
                 {username: username, email: email, password: password}
             );
+            console.log(res)
             if(res.response_code === 200){
                 setLoggedIn(true);
                 navigate("/chatRooms");
@@ -58,8 +59,8 @@ export const LoginProvider = ({children}) =>{
                 endpoints.getUserInfo.method,
                 {key: key, token:token}
             );
-            console.log(res);
-            if(res.response_code === 200){
+            console.log(res.data);
+            if(res.data.response_code === 200){
                 setUserInfo(res);
             }
         } catch (error){

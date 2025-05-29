@@ -65,10 +65,10 @@ const server = async (endpoint, method, params = {}, body = {}) => {
     if (method === "get" || method === "delete"){
         const res = await axios[method](`${rootEndpoint()}/${endpoint}`, { params, headers: { authorization: auth , 'Content-Type': 'application/json',
                 'Accept': 'application/json'}  });
-        return res;
+        return res.data;
     } else {
         const res = await axios[method](`${rootEndpoint()}/${endpoint}`, body, { params, headers: { authorization: auth } });
-        return res;
+        return res.data;
     }
 };
 
