@@ -2,21 +2,41 @@ import { createContext, useState, useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import server, { endpoints } from "../utils/server";
 import { AuthContext } from "./authContext";
+import { message } from "antd";
 
 export const LoginContext = createContext();
 
 export const LoginProvider = ({children}) =>{
 
     const authContext = useContext(AuthContext);
-
     const [userInfo, setUserInfo] = useState();
+    const { loggedIn, setLoggedIn } = authContext;
+    const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
 
     if (!authContext) {
         throw new Error('LoginProvider must be wrapped in AuthProvider');
     }
 
-    const { loggedIn, setLoggedIn } = authContext;
-    const navigate = useNavigate();
+    const handleSuccess = (successMessage) =>{
+        messageApi.open({
+            type: 'success',
+            content: successMessage,
+            style: {
+                backgroundColor: "#5865f2",
+            },
+        });
+    }
+
+    const handleError = (errorMessage) =>{
+        messageApi.open({
+            type: 'error',
+            content: errorMessage,
+            style: {
+                backgroundColor: "#5865f2",
+            },
+        });
+    }
 
     const ValidateUser = useCallback(async (usernameOrEmail, password) =>{
         try{
@@ -31,7 +51,7 @@ export const LoginProvider = ({children}) =>{
             }
             console.log(res.response_code);
         } catch (error) {
-            console.error(error);
+            handleError("Error iniciando sesion ", error);
         }
     }, [navigate, setLoggedIn]);
 
@@ -47,8 +67,9 @@ export const LoginProvider = ({children}) =>{
                 setLoggedIn(true);
                 navigate("/chatRooms");
             }
+            handleSuccess("Bienvenido");
         } catch (error) {
-            console.error(error);
+            handleError("Error creando usuario ", error);
         }
     }, []);
 
@@ -64,7 +85,7 @@ export const LoginProvider = ({children}) =>{
                 setUserInfo(res);
             }
         } catch (error){
-            console.error(error);
+           handleError(error);
         }
     });
 
@@ -79,8 +100,9 @@ export const LoginProvider = ({children}) =>{
                 setLoggedIn(false);
                 navigate("/chatRooms");
             }
+            handleSuccess("Hasta luego");
         } catch (error) {
-            console.error(error);
+            handleError("Error cerrando sesion", error);
         }
     }, []);
 
