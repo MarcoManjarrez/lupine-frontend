@@ -18,14 +18,14 @@ export const LoginProvider = ({children}) =>{
     const { loggedIn, setLoggedIn } = authContext;
     const navigate = useNavigate();
 
-    const ValidateUser = useCallback(async (username, password) =>{
+    const ValidateUser = useCallback(async (usernameOrEmail, password) =>{
         try{
             const res = await server(
                 endpoints.validateUser.route, 
                 endpoints.validateUser.method,
-                {username: username, password: password}
+                {key: usernameOrEmail, password: password}
             );
-            if(res.response_code === 200){
+            if(res.data.response_code === 200){
                 setLoggedIn(true);
                 navigate("/chatRooms");
             }
@@ -52,12 +52,12 @@ export const LoginProvider = ({children}) =>{
         }
     }, []);
 
-    const GetUserInfo = (async (key) =>{
+    const GetUserInfo = (async (usernameOrEmail) =>{
         try{
             const res = await server(
                 endpoints.getUserInfo.route,
                 endpoints.getUserInfo.method,
-                {key: key, token:token}
+                {key: usernameOrEmail, token: token}
             );
             console.log(res.data);
             if(res.data.response_code === 200){

@@ -22,7 +22,7 @@ export const endpoints ={
         route: "getAllUsers",
         method: "get",
     },
-    createChat: {
+    createGroupChat: {
         route: "createChat",
         method: "post",
     },
