@@ -78,11 +78,12 @@ export const ChatRoomsProvider = ({children}) =>{
         } catch (error){
             handleError("Error al conseguir mensajes ", error);
         }
-      },[]);
+    },[]);
 
-    const GetChats = useCallback(async (userId, lastUpdate) =>{
+    const GetChats = useCallback(async (lastUpdate) =>{
         try{
             let token = localStorage.getItem("auth");
+            let userId = localStorage.getItem("userId");
             const res = await server(
                 endpoints.getChats.route,
                 endpoints.getChats.method,
@@ -94,17 +95,16 @@ export const ChatRoomsProvider = ({children}) =>{
         } catch (error){
             handleError("Error encontrando chats ", error);
         }
-      },[]);
+    },[]);
 
-      
-
-    const SendMessage = useCallback(async (chat_id, sender_id, content) =>{
+    const SendMessage = useCallback(async (chatId, sender_id, content) =>{
         try{
             let token = localStorage.getItem("auth");
+            let senderId = localStorage.getItem("userId");
             const res = await server(
                 endpoints.sendMessage.route,
                 endpoints.sendMessage.method,
-                {sender_id: sender_id, content: content, chat_id: chat_id, message_type : "text", token: token}
+                {sender_id: senderId, content: content, chat_id: chatId, message_type : "text", token: token}
             ); 
             console.log(res)
             GetChatMessages(chat_id)
@@ -113,8 +113,9 @@ export const ChatRoomsProvider = ({children}) =>{
         }
       },[]);
 
-    const LeaveChat = useCallback(async (userId, chatId) =>{
+    const LeaveChat = useCallback(async (chatId) =>{
         try{
+            let userId = localStorage.getItem("userId");
             const res = await server(
                 endpoints.leaveChat.route,
                 endpoints.leaveChat.method,

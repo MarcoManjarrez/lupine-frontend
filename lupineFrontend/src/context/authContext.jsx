@@ -24,10 +24,11 @@ export const AuthProvider = ({children}) =>{
         };
     }, []);
 
-    const onSuccessfulLogin = ({ accessToken }) => {
+    const onSuccessfulLogin = ({ accessToken, userId }) => {
         setLoggedIn(true);
 
         localStorage.setItem("auth", accessToken);
+        localStorage.setItem("userId", userId);
     };
 
     const logOut = () => {

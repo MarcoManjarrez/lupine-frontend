@@ -75,6 +75,7 @@ export const LoginProvider = ({children}) =>{
 
     const GetUserInfo = (async (usernameOrEmail) =>{
         try{
+            let token = localStorage.getItem("auth");
             const res = await server(
                 endpoints.getUserInfo.route,
                 endpoints.getUserInfo.method,
