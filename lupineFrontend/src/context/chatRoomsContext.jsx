@@ -26,11 +26,11 @@ export const ChatRoomsProvider = ({children}) =>{
             },
         });
     }
-    
-    
+   
+   
     const [chatMessage, setChatMessage] = useState([]);
     const [chats, setChats] = useState([]);
-    
+   
     const CreateGroupChat = useCallback(async (chatName, createdBy, participantIds) =>{
         try{
             let token = localStorage.getItem("auth");
@@ -38,7 +38,7 @@ export const ChatRoomsProvider = ({children}) =>{
                 endpoints.createGroupChat.route,
                 endpoints.createGroupChat.method,
                 {is_group: true, chat_name: chatName, created_by: createdBy, participant_ids: participantIds, token: token}
-            ); 
+            );
             if(res.data.response_code == 200){
                 handleSuccess("Chat creado con exito");
             }
@@ -46,15 +46,15 @@ export const ChatRoomsProvider = ({children}) =>{
             handleError("Error creando el chat ", error);
         }
     },[]);
-    
+   
     const AddToGroupChat = useCallback(async (chatId, addedBy, participantIds) =>{
         try{
             let token = localStorage.getItem("auth");
             const res = await server(
-                endpoints.addToChat.route,
-                endpoints.addToChat.method,
+                endpoints.addToGroupChat.route,
+                endpoints.addToGroupChat.method,
                 {chat_id: chatId, added_by: addedBy, participant_ids: participantIds, token: token}
-            ); 
+            );
             if(res.data.response_code == 200){
                 handleSuccess("Usuario añadido con exito");
             }
@@ -63,6 +63,7 @@ export const ChatRoomsProvider = ({children}) =>{
         }
     },[]);
 
+
     const GetChatMessages = useCallback(async (chatId, lastUpdateTimestamp) =>{
         try{
             let token = localStorage.getItem("auth");
@@ -70,7 +71,7 @@ export const ChatRoomsProvider = ({children}) =>{
                 endpoints.getChatMessages.route,
                 endpoints.getChatMessages.method,
                 {chat_id: chatId, last_update_timestamp: lastUpdateTimestamp, token: token}
-            ); 
+            );
             console.log(res);    
             if(res.data.response_code === 200){
                 setChatMessage(res.data.messages_array);
@@ -78,7 +79,7 @@ export const ChatRoomsProvider = ({children}) =>{
         } catch (error){
             handleError("Error al conseguir mensajes ", error);
         }
-    },[]);
+      },[]);
 
     const GetChats = useCallback(async (lastUpdate) =>{
         try{
@@ -88,14 +89,14 @@ export const ChatRoomsProvider = ({children}) =>{
                 endpoints.getChats.route,
                 endpoints.getChats.method,
                 {user_id: userId, last_update_timestamp: lastUpdate, token: token}
-            ); 
+            );
             if(res.response_code === 200){
                 setChats(res);
             }
         } catch (error){
             handleError("Error encontrando chats ", error);
         }
-    },[]);
+      },[]);
 
     const SendMessage = useCallback(async (chatId, sender_id, content) =>{
         try{
@@ -105,7 +106,7 @@ export const ChatRoomsProvider = ({children}) =>{
                 endpoints.sendMessage.route,
                 endpoints.sendMessage.method,
                 {sender_id: senderId, content: content, chat_id: chatId, message_type : "text", token: token}
-            ); 
+            );
             console.log(res)
             GetChatMessages(chat_id)
         } catch (error){
@@ -113,14 +114,15 @@ export const ChatRoomsProvider = ({children}) =>{
         }
       },[]);
 
+
     const LeaveChat = useCallback(async (chatId) =>{
         try{
             let userId = localStorage.getItem("userId");
             const res = await server(
-                endpoints.leaveChat.route,
-                endpoints.leaveChat.method,
+                endpoints.exitChat.route,
+                endpoints.exitChat.method,
                 {user_id: userId, chat_id: chatId}
-            ); 
+            );
             if(res.response_code === 200){
                 handleSuccess("Usuario sacado del chat");
             }
@@ -129,8 +131,40 @@ export const ChatRoomsProvider = ({children}) =>{
         }
       } ,[]);
 
+
+     
+    const RemoveFromChat = useCallback(async (userId, chatId) =>{
+        try{
+            const res = await server(
+                endpoints.removeFromChat.route,
+                endpoints.removeFromChat.method,
+                {user_id: userId, chat_id: chatId}
+            );
+            if(res.response_code === 200){
+                handleSuccess("Usuario sacado del chat");
+            }
+        } catch (error){
+            handleError("Error eliminando a usuario, vuelva a intentarlo", error);
+        }
+      } ,[]);
+
+
+    const GetChatInfo = useCallback(async (userId, chatId) =>{
+        try{
+            const res = await server(
+                endpoints.getChatInfo.route,
+                endpoints.getChatInfo.method,
+                {user_id: userId, chat_id: chatId}
+            );
+            if(res.response_code === 200){
+                handleSuccess("Usuario sacado del chat");
+            }
+        } catch (error){
+            handleError("Error eliminando a usuario, vuelva a intentarlo", error);
+        }
+      } ,[]);
     return(
-        <ChatRoomsContext.Provider value={{ chatMessage, setChatMessage, GetChatMessages, chats, setChats, GetChats, AddToGroupChat, CreateGroupChat, SendMessage, LeaveChat}}>
+        <ChatRoomsContext.Provider value={{ chatMessage, setChatMessage, GetChatMessages, chats, setChats, GetChats, AddToGroupChat, CreateGroupChat, SendMessage, LeaveChat, RemoveFromChat, GetChatInfo}}>
             {children}
         </ChatRoomsContext.Provider>
     );

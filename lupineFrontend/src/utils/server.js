@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { rootEndpoint } from './constant';
 
+
 export const endpoints ={
     validateUser: {
         route: "login",
         method: "post"
-    }, 
+    },
     createUser:{
         route: "createUser",
         method: "post"
@@ -16,10 +17,6 @@ export const endpoints ={
     },
     getUserInfo: {
         route: "getUserInfo",
-        method: "get",
-    },
-    getAllUsers: {
-        route: "getAllUsers",
         method: "get",
     },
     createGroupChat: {
@@ -42,15 +39,19 @@ export const endpoints ={
         route: "getChatMessages",
         method: "get",
     },
-    deleteFromChat: {
-        route: "deleteFromChat",
+    getChatInfo: {
+        route: "getChatInfo",
+        method: "get",
+    },
+    removeFromChat: {
+        route: "removeFromChat",
         method: "delete",
     },
-    deleteChat: {
-        route: "createChat",
+    exitChat: {
+        route: "exitChat",
         method: "post",
     },
-    
+   
 };
 
 const server = async (endpoint, method, params = {}, body = {}) => {
