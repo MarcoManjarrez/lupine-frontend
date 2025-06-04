@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "../styles/createChatModal.scss";
+import { ChatRoomsContext } from "../context/chatRoomsContext";
+
 
 const CreateChatModal = ({handleCreateModalClose, handleCreateModalSend}) =>{
+
+    const { GetUserInfo, userInfo, setUserInfo} = useContext(ChatRoomsContext);
+    const [userInfoArray, setUserInfoArray] = useState([]);
+    const [username, setUsername] = useState("");
 
     const testUsers =[
         {
@@ -27,15 +33,33 @@ const CreateChatModal = ({handleCreateModalClose, handleCreateModalSend}) =>{
         )
     }
 
+    const onAddUserChange = (e) =>{
+        setUsername(e.target.value);
+    }
+
+    const handleGetUser = () =>{
+        if(username !== null){
+            GetUserInfo(username);
+        }
+        if(userInfo){
+            setUserInfoArray({
+                ...userInfoArray,
+                id: userInfo.id, username: userInfo.username,
+            })
+        }
+    }
+
     return(
         <div className="createChatModal">
             <div className="createChatModal__header">
                 <h1>Crear chat</h1>
             </div>
+            <input placeholder="Nombre del chat"/>
+            <input placeholder="Buscar usuarios" onChange={(e) => onAddUserChange(e)}/>
+            <button onClick={handleGetUser}>Agregar</button>
             <div className="createChatModal__inputContainer">
-             {testUsers ? (testUsers.map((user) => <NameHolder user={user}/>)) : null}
+             {userInfoArray ? (userInfoArray.map((user) => <NameHolder user={user}/>)) : null}
             </div>
-            <input/>
             <div className="createChatModal__buttonsContainer">
                 <button className="createChatModal__buttonsContainer__cancelButton" onClick={handleCreateModalClose}>Cancelar</button>
                 <button className="createChatModal__buttonsContainer__createButton" onClick={handleCreateModalSend}>Crear</button>

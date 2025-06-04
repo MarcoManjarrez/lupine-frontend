@@ -7,9 +7,10 @@ export const AuthProvider = ({children}) =>{
     const [loggedIn, setLoggedIn] = useState(false);
     
     useEffect(() => {
-        const tokenSaved = localStorage.getItem("auth");
-        if (tokenSaved) {
-            // silentLogin();
+        const token = localStorage.getItem("auth");
+        const userId = localStorage.getItem("userId");
+        if (token) {
+            onSuccessfulLogin(token, userId);
         }
 
         const handleLogout = () => {

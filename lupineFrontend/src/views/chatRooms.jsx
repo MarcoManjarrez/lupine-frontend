@@ -5,19 +5,21 @@ import user from "../img/user.png";
 import ChatTab from "../components/ChatTab";
 import CreateChatModal from "../components/createChatModal";
 import KickChatModal from "../components/kickChatModal";
+import ConfirmModal from "../components/confirmModal";
 import "../styles/chatRooms.scss";
 import { NavLink } from "react-router-dom";
 import { ChatRoomsContext } from "../context/chatRoomsContext";
-import { MessageSquare, Search, PaperclipIcon, SendIcon, Plus, Trash2 } from "lucide-react";
+import { MessageSquare, Search, DoorOpen, SendIcon, Plus, Trash2 } from "lucide-react";
 import MessageBubble from "../components/messageBubble";
 import moment from "moment";
 
 const ChatRooms = () => {
-  const { GetChats, SendMessage, chatMessage,  GetChatMessages} = useContext(ChatRoomsContext);
+  const { GetChats, SendMessage, chatMessage,  GetChatMessages, chatsArray, setChatsArray} = useContext(ChatRoomsContext);
   const [activeChat, setActiveChat] = useState();
   const [message, setMessage] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isKickModalOpen, setIsKickModalOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const chatRoomsTest = [
     {
@@ -66,14 +68,13 @@ const ChatRooms = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    //GetChats(moment.format('MMMM Do YYYY, h:mm:ss'));
+    GetChats("2023-01-01 00:00:00");
   }, [chatMessage, activeChat])
 
   const handleChatSelect = (chat) => {
-    GetChatMessages(chat.id)
-    setActiveChat(chat)
-    // Here you would typically call getChat(chat.id) to fetch messages
-  }
+    GetChatMessages(chat.id);
+    setActiveChat(chat);
+  };
 
   const handleSendMessage = () => {
     if (!message.trim() || !activeChat) return
@@ -125,6 +126,19 @@ const ChatRooms = () => {
     
   }; 
 
+  const handleConfirmOpen = () => {
+    setIsConfirmOpen(true);
+  }; 
+
+  const handleConfirmClose = () => {
+    setIsConfirmOpen(false);
+  }; 
+
+  const handleConfirmSend = () => {
+    setIsConfirmOpen(false);
+    
+  }; 
+
   return (
     <div className="chatRoomsContainer">
       <div className="sidebar">
@@ -139,8 +153,8 @@ const ChatRooms = () => {
           </div>
         </div>
         <div className="chatList">
-          {chatRoomsTest ? (
-            chatRoomsTest.map((chatRoom, index) => (
+          {chatsArray ? (
+            chatsArray.map((chatRoom, index) => (
               <ChatTab
                 key={index}
                 chatRoom={chatRoom}
@@ -201,9 +215,7 @@ const ChatRooms = () => {
 
             <div className="chat-input">
               <button className="delete-button" onClick={handleKickModalOpen}><Trash2 /></button>
-              <button className="attachment-button">
-                <PaperclipIcon size={20} />
-              </button>
+              <button className="delete-button" onClick={handleConfirmOpen}><DoorOpen /></button>
               <input
                 type="text"
                 placeholder="Escribe un mensaje..."
@@ -225,6 +237,7 @@ const ChatRooms = () => {
       </div>
       {isCreateModalOpen ? (<CreateChatModal handleCreateModalClose={handleCreateModalClose} handleCreateModalSend={handleCreateModalSend}/>) : null}
       {isKickModalOpen ? (<KickChatModal handleCreateModalClose={handleKickModalClose} handleCreateModalSend={handleKickModalSend}/>) : null}
+      {isConfirmOpen ? (<ConfirmModal handleCreateModalClose={handleConfirmClose} handleCreateModalSend={handleConfirmSend} action="¿Seguro que quieres salir del chat?" confirmOption="Salir"/>) : null}
     </div>
   )
 }

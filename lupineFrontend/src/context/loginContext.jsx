@@ -2,7 +2,6 @@ import { createContext, useState, useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import server, { endpoints } from "../utils/server";
 import { AuthContext } from "./authContext";
-import { message } from "antd";
 
 export const LoginContext = createContext();
 
@@ -12,32 +11,11 @@ export const LoginProvider = ({children}) =>{
     const navigate = useNavigate();
     
     const [userInfo, setUserInfo] = useState();
-    const [messageApi, contextHolder] = message.useMessage();
     const { loggedIn, setLoggedIn } = authContext;
 
     if (!authContext) {
         throw new Error('LoginProvider must be wrapped in AuthProvider');
     }
-
-    /*const handleSuccess = (successMessage) =>{
-        messageApi.open({
-            type: 'success',
-            content: successMessage,
-            style: {
-                backgroundColor: "#5865f2",
-            },
-        });
-    }
-
-    const handleError = (errorMessage) =>{
-        messageApi.open({
-            type: 'error',
-            content: errorMessage,
-            style: {
-                backgroundColor: "#5865f2",
-            },
-        });
-    }*/
 
     const ValidateUser = useCallback(async (usernameOrEmail, password) =>{
         try{
@@ -46,9 +24,10 @@ export const LoginProvider = ({children}) =>{
                 endpoints.validateUser.method,
                 {key: usernameOrEmail.toLowerCase(), password: password}
             );
-            if(res.data.status === "ok"){
+            if(res.data.response_code === 200){
                 setLoggedIn(true);
                 localStorage.setItem("token", res.data.token);
+                localStorage.setItem("userId", res.data.user_id);
                 console.log(localStorage.getItem("token"));
                 navigate("/chatRooms");
             }
@@ -57,7 +36,7 @@ export const LoginProvider = ({children}) =>{
         }
     }, [navigate, setLoggedIn]);
 
-     const CreateUser = useCallback(async (username, email, password) =>{
+    const CreateUser = useCallback(async (username, email, password) =>{
         try{
             const res = await server(
                 endpoints.createUser.route, 
@@ -67,7 +46,7 @@ export const LoginProvider = ({children}) =>{
             console.log(res)
             if(res.data.response_code === 200){
                 setLoggedIn(true);
-                navigate("/chatRooms");
+                navigate("/login");
             }
         } catch (error) {
             console.error("Error creando usuario ", error);

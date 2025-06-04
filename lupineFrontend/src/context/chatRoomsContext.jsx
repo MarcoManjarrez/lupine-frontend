@@ -6,6 +6,10 @@ export const ChatRoomsContext = createContext();
 
 export const ChatRoomsProvider = ({children}) =>{
     const [messageApi, contextHolder] = message.useMessage();
+    const [chatsArray, setChatsArray] = useState();
+    const [chatMessage, setChatMessage] = useState([]);
+    const [userInfo, setUserInfo] = useState();
+   
 
     const handleSuccess = (successMessage) =>{
         messageApi.open({
@@ -27,10 +31,7 @@ export const ChatRoomsProvider = ({children}) =>{
         });
     }
    
-   
-    const [chatMessage, setChatMessage] = useState([]);
-    const [chats, setChats] = useState([]);
-   
+
     const CreateGroupChat = useCallback(async (chatName, createdBy, participantIds) =>{
         try{
             let token = localStorage.getItem("auth");
@@ -91,7 +92,7 @@ export const ChatRoomsProvider = ({children}) =>{
                 {user_id: userId, last_update_timestamp: lastUpdate, token: token}
             );
             if(res.response_code === 200){
-                setChats(res);
+                setChatsArray(res.data);
             }
         } catch (error){
             handleError("Error encontrando chats ", error);
@@ -164,7 +165,7 @@ export const ChatRoomsProvider = ({children}) =>{
         }
       } ,[]);
     return(
-        <ChatRoomsContext.Provider value={{ chatMessage, setChatMessage, GetChatMessages, chats, setChats, GetChats, AddToGroupChat, CreateGroupChat, SendMessage, LeaveChat, RemoveFromChat, GetChatInfo}}>
+        <ChatRoomsContext.Provider value={{ chatMessage, setChatMessage, GetChatMessages, GetChats, AddToGroupChat, CreateGroupChat, SendMessage, LeaveChat, RemoveFromChat, GetChatInfo, chatsArray, setChatsArray, userInfo, setUserInfo}}>
             {children}
         </ChatRoomsContext.Provider>
     );
