@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom";
 import { ChatRoomsContext } from "../context/chatRoomsContext";
 import { MessageSquare, Search, PaperclipIcon, SendIcon, Plus } from "lucide-react";
 import MessageBubble from "../components/messageBubble";
+import moment from "moment";
 
 const ChatRooms = () => {
   const { GetChats, SendMessage, chatMessage,  GetChatMessages} = useContext(ChatRoomsContext);
@@ -63,10 +64,10 @@ const ChatRooms = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    GetChats(moment.format('MMMM Do YYYY, h:mm:ss'));
   }, [chatMessage, activeChat])
 
   const handleChatSelect = (chat) => {
-
     GetChatMessages(chat.id)
     setActiveChat(chat)
     // Here you would typically call getChat(chat.id) to fetch messages
@@ -92,7 +93,6 @@ const ChatRooms = () => {
     //   },
     // ])
 
-    // Clear the input
     setMessage("")
     GetChatMessages(activeChat.id)
   }
@@ -107,7 +107,7 @@ const ChatRooms = () => {
 
   const handleCreateModalSend = () => {
     setIsCreateModalOpen(false);
-    //llamar server
+    
   } 
 
   return (

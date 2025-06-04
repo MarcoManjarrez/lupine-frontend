@@ -1,21 +1,18 @@
-import { Suspense } from "react"
-import { Route, Routes } from "react-router-dom"
-import { routesConfig } from "../config/routesConfig"
-import "../styles/loading.scss"
+import { Suspense } from "react";
+import { Route, Routes } from "react-router-dom";
+import { routesConfig } from "../config/routesConfig";
+import "../styles/loading.scss";
 
-// Loading fallback component
 const Loading = ({ mensaje }) => (
   <div className="loading-fallback">
     <div className="spinner"></div>
     <p>{mensaje || "Cargando..."}</p>
   </div>
-)
+);
 
 const MainPage = () => {
-  const routes = routesConfig()
-
-  // You can add your sessionReceived check here
-  const sessionReceived = true // Replace with your actual session check
+  const routes = routesConfig();
+  const sessionReceived = true;
 
   if (!sessionReceived) {
     return <Loading mensaje="Cargando sesión..." />
@@ -33,6 +30,6 @@ const MainPage = () => {
       </Suspense>
     </div>
   )
-}
+};
 
-export default MainPage
+export default MainPage;

@@ -1,6 +1,4 @@
-"use client"
-
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect } from "react"
 import lupineLogo from "../img/lupineLogo.png"
 import "../styles/login.scss"
 import { LoginContext } from "../context/loginContext"
@@ -10,9 +8,18 @@ const Login = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
+  useEffect(() => { 
+    localStorage.removeItem("token");
+    console.log(localStorage.getItem("token"));
+  },[])
+
   const handleLogin = (e) => {
-    e.preventDefault()
-    ValidateUser(username, password)
+    e.preventDefault();
+    if(username && password){
+      ValidateUser(username, password)
+    } else {
+      console.log("Campos sin llenar");
+    }
   }
 
   const handleRegister = (e) => {

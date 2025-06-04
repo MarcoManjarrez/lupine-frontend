@@ -8,15 +8,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { ChatRoomsProvider } from "./context/chatRoomsContext"
 import "./styles/global.scss"
 import "./styles/loading.scss"
-
-// Import with React.lazy
 import React, { Suspense } from "react"
+
 const ChatRooms = React.lazy(() => import("./views/chatRooms.jsx"))
 const Login = React.lazy(() => import("./views/login.jsx"))
 const ProfileUpload = React.lazy(() => import("./views/profileUpload.jsx"))
 const MainPage = React.lazy(() => import("./views/mainPage.jsx"))
 
-// Loading fallback component
 const LoadingFallback = () => (
   <div className="loading-fallback">
     <div className="spinner"></div>

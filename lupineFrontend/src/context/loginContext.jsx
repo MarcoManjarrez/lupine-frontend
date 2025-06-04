@@ -9,16 +9,17 @@ export const LoginContext = createContext();
 export const LoginProvider = ({children}) =>{
 
     const authContext = useContext(AuthContext);
-    const [userInfo, setUserInfo] = useState();
-    const { loggedIn, setLoggedIn } = authContext;
     const navigate = useNavigate();
+    
+    const [userInfo, setUserInfo] = useState();
     const [messageApi, contextHolder] = message.useMessage();
+    const { loggedIn, setLoggedIn } = authContext;
 
     if (!authContext) {
         throw new Error('LoginProvider must be wrapped in AuthProvider');
     }
 
-    const handleSuccess = (successMessage) =>{
+    /*const handleSuccess = (successMessage) =>{
         messageApi.open({
             type: 'success',
             content: successMessage,
@@ -36,22 +37,23 @@ export const LoginProvider = ({children}) =>{
                 backgroundColor: "#5865f2",
             },
         });
-    }
+    }*/
 
     const ValidateUser = useCallback(async (usernameOrEmail, password) =>{
         try{
             const res = await server(
                 endpoints.validateUser.route, 
                 endpoints.validateUser.method,
-                {key: usernameOrEmail, password: password}
+                {key: usernameOrEmail.toLowerCase(), password: password}
             );
-            if(res.data.response_code === 200){
+            if(res.data.status === "ok"){
                 setLoggedIn(true);
+                localStorage.setItem("token", res.data.token);
+                console.log(localStorage.getItem("token"));
                 navigate("/chatRooms");
             }
-            console.log(res.response_code);
         } catch (error) {
-            handleError("Error iniciando sesion ", error);
+            console.error("Error iniciando sesion ", error);
         }
     }, [navigate, setLoggedIn]);
 
@@ -67,9 +69,8 @@ export const LoginProvider = ({children}) =>{
                 setLoggedIn(true);
                 navigate("/chatRooms");
             }
-            handleSuccess("Bienvenido");
         } catch (error) {
-            handleError("Error creando usuario ", error);
+            console.error("Error creando usuario ", error);
         }
     }, []);
 
@@ -86,7 +87,7 @@ export const LoginProvider = ({children}) =>{
                 setUserInfo(res);
             }
         } catch (error){
-           handleError(error);
+           console.error(error);
         }
     });
 
@@ -101,9 +102,9 @@ export const LoginProvider = ({children}) =>{
                 setLoggedIn(false);
                 navigate("/chatRooms");
             }
-            handleSuccess("Hasta luego");
+            console.log("Hasta luego");
         } catch (error) {
-            handleError("Error cerrando sesion", error);
+            console.error("Error cerrando sesion", error);
         }
     }, []);
 
