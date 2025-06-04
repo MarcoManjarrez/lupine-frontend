@@ -184,6 +184,20 @@
           color: rgba(255, 255, 255, 0.8);
         }
       }
+      .delete-button {
+        background: transparent;
+        color:rgba(255, 255, 255, 0.6);
+        padding: 8px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        &:hover {
+          background-color: #FF0000;
+          color: rgba(255, 255, 255, 0.8);
+        }
+      }
       
       input {
         flex: 1;

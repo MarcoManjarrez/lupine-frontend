@@ -4,10 +4,11 @@ import { useContext, useState, useRef, useEffect} from "react";
 import user from "../img/user.png";
 import ChatTab from "../components/ChatTab";
 import CreateChatModal from "../components/createChatModal";
+import KickChatModal from "../components/kickChatModal";
 import "../styles/chatRooms.scss";
 import { NavLink } from "react-router-dom";
 import { ChatRoomsContext } from "../context/chatRoomsContext";
-import { MessageSquare, Search, PaperclipIcon, SendIcon, Plus } from "lucide-react";
+import { MessageSquare, Search, PaperclipIcon, SendIcon, Plus, Trash2 } from "lucide-react";
 import MessageBubble from "../components/messageBubble";
 import moment from "moment";
 
@@ -16,6 +17,7 @@ const ChatRooms = () => {
   const [activeChat, setActiveChat] = useState();
   const [message, setMessage] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isKickModalOpen, setIsKickModalOpen] = useState(false);
 
   const chatRoomsTest = [
     {
@@ -64,7 +66,7 @@ const ChatRooms = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    GetChats(moment.format('MMMM Do YYYY, h:mm:ss'));
+    //GetChats(moment.format('MMMM Do YYYY, h:mm:ss'));
   }, [chatMessage, activeChat])
 
   const handleChatSelect = (chat) => {
@@ -99,16 +101,29 @@ const ChatRooms = () => {
 
   const handleCreateModalOpen = () => {
     setIsCreateModalOpen(true);
-  } 
+  }; 
 
   const handleCreateModalClose = () => {
     setIsCreateModalOpen(false);
-  } 
+  }; 
 
   const handleCreateModalSend = () => {
     setIsCreateModalOpen(false);
     
-  } 
+  }; 
+
+  const handleKickModalOpen = () => {
+    setIsKickModalOpen(true);
+  }; 
+
+  const handleKickModalClose = () => {
+    setIsKickModalOpen(false);
+  }; 
+
+  const handleKickModalSend = () => {
+    setIsKickModalOpen(false);
+    
+  }; 
 
   return (
     <div className="chatRoomsContainer">
@@ -185,6 +200,7 @@ const ChatRooms = () => {
             </div>
 
             <div className="chat-input">
+              <button className="delete-button" onClick={handleKickModalOpen}><Trash2 /></button>
               <button className="attachment-button">
                 <PaperclipIcon size={20} />
               </button>
@@ -208,6 +224,7 @@ const ChatRooms = () => {
         )}
       </div>
       {isCreateModalOpen ? (<CreateChatModal handleCreateModalClose={handleCreateModalClose} handleCreateModalSend={handleCreateModalSend}/>) : null}
+      {isKickModalOpen ? (<KickChatModal handleCreateModalClose={handleKickModalClose} handleCreateModalSend={handleKickModalSend}/>) : null}
     </div>
   )
 }

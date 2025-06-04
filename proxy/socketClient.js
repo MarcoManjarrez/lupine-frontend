@@ -5,6 +5,7 @@ const BALANCERS = [
   // { host: "10.7.29.169", tcpPort: 8080, udpPort: 5001 }, //emi
   { host: "10.7.27.134", tcpPort: 3000, udpPort: 3001 }, //pepe
   { host: "127.0.0.1", tcpPort: 5000, udpPort: 5001 },
+  { host: "10.7.6.109", tcpPort: 3000, udpPort: 3000}
   // Agrega más si lo necesitas
 ];
 

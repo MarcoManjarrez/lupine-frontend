@@ -98,6 +98,18 @@
                 color: #000000;
             }
         }
+
+        &__deleteButton{
+            background-color: #7289DA;
+            border: none;
+            border-radius: 12px;
+            color: #FFFFFF;
+            width: 45%;
+
+            &:hover{
+                background-color: #FF0000;
+            }
+        }
     }
 
     @keyframes slide-up {
