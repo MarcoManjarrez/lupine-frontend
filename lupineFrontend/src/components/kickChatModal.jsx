@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "../styles/createChatModal.scss";
+import { Trash2 } from "lucide-react";
+import { ChatRoomsContext } from "../context/chatRoomsContext";
 
 const KickChatModal = ({handleCreateModalClose, handleCreateModalSend}) =>{
+
+
+    const {RemoveFromChat} = useContext(ChatRoomsContext)
 
     const testUsers =[
         {
@@ -38,11 +43,16 @@ const KickChatModal = ({handleCreateModalClose, handleCreateModalSend}) =>{
         },
     ];
 
+    const handleRemoveFromChat= ()=>{
+        // RemoveFromChat()///////////////////////////chatId, Participants[]
+    }
+
     function NameHolder(userInfo){
         return(
             <div className="nameHolder">
                 <h1>Nombre: {userInfo.user.name}</h1>
                 <h1>Id: {userInfo.user.id}</h1>
+                <button className="delete-button" onClick={handleRemoveFromChat}><Trash2 /></button>
             </div>
         )
     }
@@ -55,7 +65,6 @@ const KickChatModal = ({handleCreateModalClose, handleCreateModalSend}) =>{
             <div className="createChatModal__inputContainer">
              {testUsers ? (testUsers.map((user) => <NameHolder user={user}/>)) : null}
             </div>
-            <input/>
             <div className="createChatModal__buttonsContainer">
                 <button className="createChatModal__buttonsContainer__cancelButton" onClick={handleCreateModalClose}>Cancelar</button>
                 <button className="createChatModal__buttonsContainer__deleteButton" onClick={handleCreateModalSend}>Sacar</button>

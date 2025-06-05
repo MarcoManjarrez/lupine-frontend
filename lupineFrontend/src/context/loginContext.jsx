@@ -24,6 +24,7 @@ export const LoginProvider = ({children}) =>{
                 endpoints.validateUser.method,
                 {key: usernameOrEmail.toLowerCase(), password: password}
             );
+            console.log(res)
             if(res.data.response_code === 200){
                 setLoggedIn(true);
                 localStorage.setItem("token", res.data.token);
@@ -55,15 +56,14 @@ export const LoginProvider = ({children}) =>{
 
     const GetUserInfo = (async (usernameOrEmail) =>{
         try{
-            let token = localStorage.getItem("auth");
+            let token = localStorage.getItem("token");
             const res = await server(
                 endpoints.getUserInfo.route,
                 endpoints.getUserInfo.method,
                 {key: usernameOrEmail, token: token}
             );
-            console.log(res.data);
             if(res.data.response_code === 200){
-                setUserInfo(res);
+                setUserInfo(res.data);
             }
         } catch (error){
            console.error(error);

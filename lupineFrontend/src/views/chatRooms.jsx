@@ -53,7 +53,7 @@ const ChatRooms = () => {
       sender_id: 1,
       sender_username: "username1",
       content: "Hola a todos!",
-      message_type: "text",
+      type: "text",
       created_at: "2025-01-01 12:00:00",
     },
     {
@@ -61,7 +61,15 @@ const ChatRooms = () => {
       sender_id: 2,
       sender_username: "Pepe",
       content: "¡Hola! ¿Qué tal?",
-      message_type: "text",
+      type: "text",
+      created_at: "2025-01-01 12:01:00",
+    },
+    {
+      message_id: 3,
+      sender_id: 3,
+      sender_username: "Pepe",
+      content: "¡Hola! ¿Qué tal?",
+      type: "system",
       created_at: "2025-01-01 12:01:00",
     },
   ]);
@@ -153,8 +161,8 @@ const ChatRooms = () => {
           </div>
         </div>
         <div className="chatList">
-          {chatsArray ? (
-            chatsArray.map((chatRoom, index) => (
+          {chatRoomsTest?.length > 0 ? (
+            chatRoomsTest.map((chatRoom, index) => (
               <ChatTab
                 key={index}
                 chatRoom={chatRoom}
@@ -183,7 +191,7 @@ const ChatRooms = () => {
               <div className="chat-user">
                 <div className="avatar-container">
                   <img
-                    src={activeChat.chatRoomImage || "/placeholder.svg"}
+                    src={activeChat.chatRoomImage || user ||  "/placeholder.svg"}
                     alt={activeChat.chatRoomName}
                     className="avatar"
                   />
@@ -195,17 +203,18 @@ const ChatRooms = () => {
             </div>
 
             <div className="chat-messages">
-              {chatMessage.length === 0 ? (
+              {chatTest.length === 0 ? (
                 <div className="empty-message">
                   <p>No hay mensajes aún. Comienza la conversación.</p>
                 </div>
               ) : (
-                chatMessage.map((msg) => (
+                chatTest.map((msg) => (
                   <MessageBubble
                     key={msg.message_id}
                     sender_id={msg.sender_id}
                     sender_username={msg.sender_username}
                     content={msg.content}
+                    type={msg.type}
                     currentUserId={currentUserId}
                   />
                 ))

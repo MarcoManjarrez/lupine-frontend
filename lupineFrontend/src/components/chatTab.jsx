@@ -1,5 +1,5 @@
 "use client"
-
+import user from "../img/user.png";
 import "../styles/chatTab.scss"
 
 const ChatTab = ({ chatRoom, isActive, onClick }) => {
@@ -8,7 +8,7 @@ const ChatTab = ({ chatRoom, isActive, onClick }) => {
   return (
     <div className={`chatTabContainer ${isActive ? "active" : ""}`} onClick={onClick}>
       <div className="chatTabContainer__avatar">
-        <img src={chatRoomImage || "/placeholder.svg"} alt={chatRoomName} />
+        <img src={chatRoomImage || user || "/placeholder.svg"} alt={chatRoomName} />
       </div>
 
       <div className="chatTabContainer__titleMessage">

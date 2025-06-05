@@ -1,9 +1,10 @@
 const net = require("net");
 const dgram = require("dgram");
+const { encodeMessage, decodeMessage } = require("./codec");
 
 const BALANCERS = [
   // { host: "10.7.29.169", tcpPort: 8080, udpPort: 5001 }, //emi
-  { host: "10.7.27.134", tcpPort: 3000, udpPort: 3001 }, //pepe
+  { host: "10.7.6.109", tcpPort: 3000, udpPort: 3001 }, //pepe
   { host: "127.0.0.1", tcpPort: 5000, udpPort: 5001 },
   { host: "10.7.6.109", tcpPort: 3000, udpPort: 3000}
   // Agrega más si lo necesitas
@@ -94,13 +95,23 @@ function trySendUdp(message, host, port) {
 }
 
 exports.sendMsg = async function(params, action){
+  for (const key in params) {
+    const val = params[key];
+    if (typeof val === 'string' && /^-?\d+$/.test(val)) {
+      params[key] = parseInt(val, 10);
+    }
+  }
   if (action != 99){
     params.action = action
     const message = JSON.stringify(params)
-    console.log(message)
-    const result = await sendTcpMessage(message)
-    console.log(result)
-    return JSON.parse(result)
+    console.log("message", message)
+    const code = encodeMessage(message)
+    console.log("code", code)
+    const result = await sendTcpMessage(code)
+    console.log("res", result)
+    const decode = decodeMessage(result)
+    console.log("decode", decode)
+    return JSON.parse(decode)
   }
   return null
 

@@ -60,7 +60,6 @@ const server = async (endpoint, method, params = {}, body = {}) => {
         urlParams.push([param, params[param]]);
     });
     params = new URLSearchParams(urlParams);
-    console.log(params);
     const auth = localStorage.getItem("auth");
     // console.log(auth);
     if (method === "get" || method === "delete"){
