@@ -1,4 +1,3 @@
-import React from "react";
 import "../styles/confirmModal.scss";
 
 const ConfirmModal = ({action, confirmOption, handleCreateModalClose, handleCreateModalSend}) =>{

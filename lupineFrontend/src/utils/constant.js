@@ -1,5 +1,5 @@
 export const rootEndpoint =()=>{
     var rootEndpoint;
-    rootEndpoint = "http://127.0.0.1:3001";
+    rootEndpoint = "http://10.7.10.92:3001";
     return rootEndpoint;
 }

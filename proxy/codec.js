@@ -1,30 +1,69 @@
-const ENCRYPTION_KEY = 'buenas'; 
+const CESAR_SHIFT = 3; // Ajusta este valor al que uses en C
+// const CESAR_MAGIC_HEADER = "CESAR:";
 
+// Función para desencriptar usando cifrado César
+function cesarDecrypt(text) {
+    if (!text) return;
 
-function xorEncryptDecrypt(input, key = ENCRYPTION_KEY) {
-  let output = '';
-  for (let i = 0; i < input.length; i++) {
-    const charCode = input.charCodeAt(i) ^ key.charCodeAt(i % key.length);
-    output += String.fromCharCode(charCode);
-  }
-  return output;
+    let result = "";
+    for (let i = 0; i < text.length; i++) {
+        let c = text.charCodeAt(i);
+
+        if (c >= 32 && c <= 126) {
+            let shifted = c - CESAR_SHIFT;
+            if (shifted < 32) {
+                shifted += 95; // Rango de caracteres imprimibles
+            }
+            result += String.fromCharCode(shifted);
+        } else {
+            result += text[i]; // Caracter no modificable
+        }
+    }
+
+    return result;
 }
 
+// Función para encriptar usando cifrado César
+function cesarEncrypt(text) {
+    if (!text) return;
 
-function encodeMessage(obj) {
-  const json = JSON.stringify(obj);
-  const encrypted = xorEncryptDecrypt(json);
-  return Buffer.from(encrypted, 'utf8').toString('base64'); 
+    let result = "";
+    for (let i = 0; i < text.length; i++) {
+        let c = text.charCodeAt(i);
+
+        if (c >= 32 && c <= 126) {
+            let shifted = c + CESAR_SHIFT;
+            if (shifted > 126) {
+                shifted -= 95;
+            }
+            result += String.fromCharCode(shifted);
+        } else {
+            result += text[i];
+        }
+    }
+
+    return result;
 }
 
+// Verifica si un mensaje está cifrado con César
 
-function decodeMessage(encryptedBase64) {
-  const encrypted = Buffer.from(encryptedBase64, 'base64').toString('utf8');
-  const decryptedJson = xorEncryptDecrypt(encrypted);
-  return JSON.parse(decryptedJson);
+// Desencripta mensaje completo si tiene el header César
+function decryptCesarMessage(encryptedMessage) {
+    const decrypted = cesarDecrypt(encryptedMessage);
+    // console.log("CESAR: Decrypted message from client");
+    return decrypted;
+}
+
+// Encripta respuesta antes de enviarla al cliente
+function encryptCesarResponse(response) {
+    if (!response) return null;
+    const encryptedPart = cesarEncrypt(response);
+    const encryptedMessage = encryptedPart;
+    // console.log("CESAR: Encrypted response to client");
+    return encryptedMessage;
 }
 
 module.exports = {
-  encodeMessage,
-  decodeMessage,
+  encryptCesarResponse,
+  decryptCesarMessage
 };

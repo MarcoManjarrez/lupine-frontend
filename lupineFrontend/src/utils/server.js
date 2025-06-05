@@ -49,7 +49,7 @@ export const endpoints ={
     },
     exitChat: {
         route: "exitChat",
-        method: "post",
+        method: "delete",
     },
    
 };

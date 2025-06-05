@@ -26,12 +26,17 @@ exports.getChatMessages = async function (req, res) { // get messages from chat
   return IO.throwResult(res, {message: "Get Chat Messages", data: data})
 }
 
+exports.getChatInfo = async function (req, res) { // get messages from chat
+  const data = await sendMsg(req.query, 9)
+  return IO.throwResult(res, {message: "Get Chat Info", data: data})
+}
+
 exports.deleteUsersFromChat = async function (req, res) { //delete user from chat
-  const data = await sendMsg(req.query, 99)
+  const data = await sendMsg(req.query, 10)
   return IO.throwResult(res, {message: "Delete User from Chat", data: data})
 }
 
 exports.deleteChat = async function (req, res) { // delete chat 
-  const data = await sendMsg(req.query, 99)
-  return IO.throwResult(res, {message: "Delete Chat", data: data})
+  const data = await sendMsg(req.query, 11)
+  return IO.throwResult(res, {message: "Exit Chat", data: data})
 }

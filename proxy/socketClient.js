@@ -1,12 +1,13 @@
 const net = require("net");
 const dgram = require("dgram");
-const { encodeMessage, decodeMessage } = require("./codec");
+const { encodeMessage, decodeMessage, decryptCesarMessage, encryptCesarResponse } = require("./codec");
 
 const BALANCERS = [
   // { host: "10.7.29.169", tcpPort: 8080, udpPort: 5001 }, //emi
-  { host: "10.7.6.109", tcpPort: 3000, udpPort: 3001 }, //pepe
+  { host: "10.7.11.159", tcpPort: 3000, udpPort: 3001 }, //pepe
+  { host: "10.7.11.159", tcpPort: 3100, udpPort: 3001 }, //pepe
   { host: "127.0.0.1", tcpPort: 5000, udpPort: 5001 },
-  { host: "10.7.6.109", tcpPort: 3000, udpPort: 3000}
+  // { host: "10.7.6.109", tcpPort: 3000, udpPort: 3000}
   // Agrega más si lo necesitas
 ];
 
@@ -21,14 +22,14 @@ sendTcpMessage = async function (message) {
     }
   }
   // return "{response_code: 503, response_text: 'No load Balancers found'}"
-  throw new Error("Ningún balanceador TCP está disponible.");
+  // throw new Error("Ningún balanceador TCP está disponible.");
 }
 
 function trySendTcp(message, host, port) {
   return new Promise((resolve, reject) => {
     const client = new net.Socket();
 
-    client.setTimeout(3000); 
+    client.setTimeout(10000); 
 
     client.connect(port, host, () => {
       client.write(message);
@@ -96,21 +97,49 @@ function trySendUdp(message, host, port) {
 
 exports.sendMsg = async function(params, action){
   for (const key in params) {
-    const val = params[key];
-    if (typeof val === 'string' && /^-?\d+$/.test(val)) {
-      params[key] = parseInt(val, 10);
+      const val = params[key];
+
+      if (typeof val === 'string') {
+        const trimmed = val.trim();
+
+        // booleanos
+        if (trimmed.toLowerCase() === 'true') {
+          params[key] = true;
+        } else if (trimmed.toLowerCase() === 'false') {
+          params[key] = false;
+        }
+        // enteros
+        else if (/^-?\d+$/.test(trimmed)) {
+          params[key] = parseInt(trimmed, 10);
+        }
+        // posibles arreglos u objetos JSON
+        else if ((trimmed.startsWith('[') && trimmed.endsWith(']')) ||
+                 (trimmed.startsWith('{') && trimmed.endsWith('}'))) {
+          try {
+            params[key] = JSON.parse(trimmed);
+          } catch (e) {
+            // si no se puede parsear, dejar como string
+          }
+        }
+      }
     }
-  }
   if (action != 99){
     params.action = action
+
+    console.log("%cparams", "color: green;", params)
     const message = JSON.stringify(params)
-    console.log("message", message)
-    const code = encodeMessage(message)
-    console.log("code", code)
+    console.log("%cmessage", "color: green;", message)
+    const code = encryptCesarResponse(message)
+    console.log("%ccode", "color: red;", code)
     const result = await sendTcpMessage(code)
-    console.log("res", result)
-    const decode = decodeMessage(result)
-    console.log("decode", decode)
+     console.log("%cres", "color: blue;", result)
+    if (!result) return null
+    try{
+      return JSON.parse(result)
+    } catch{
+    }
+    const decode = decryptCesarMessage(result)
+    console.log("%cdecode", "color: yellow;", decode)
     return JSON.parse(decode)
   }
   return null

@@ -1,7 +1,7 @@
 import "../styles/messageBubble.scss"
 
 const MessageBubble = ({ sender_id, sender_username, content, type,  currentUserId }) => {
-  const isCurrentUser = sender_id === currentUserId
+  const isCurrentUser = sender_id === parseInt(currentUserId)
 
   return (
     <div className={`messageBubble ${type === "system" ? "system" : isCurrentUser ? "sent" : "received"}`}>

@@ -6,53 +6,19 @@ import { ChatRoomsContext } from "../context/chatRoomsContext";
 const KickChatModal = ({handleCreateModalClose, handleCreateModalSend}) =>{
 
 
-    const {RemoveFromChat} = useContext(ChatRoomsContext)
+    const {RemoveFromChat, activeChat} = useContext(ChatRoomsContext)
 
-    const testUsers =[
-        {
-            id:0,
-            name: "Boboboman"
-        },
-        {
-            id:2,
-            name: "PoPoPoman"
-        },
-        {
-            id:3,
-            name: "Bocch"
-        },
-        {
-            id:4,
-            name: "Roca"
-        },
-        {
-            id:5,
-            name: "Roca"
-        },
-        {
-            id:6,
-            name: "Roca"
-        },
-        {
-            id:7,
-            name: "Roca"
-        },
-        {
-            id:8,
-            name: "Roca"
-        },
-    ];
-
-    const handleRemoveFromChat= ()=>{
-        // RemoveFromChat()///////////////////////////chatId, Participants[]
+   
+    const handleRemoveFromChat= (user)=>{
+        RemoveFromChat(activeChat.chat_id, user.user_id)///////////////////////////chatId, Participants[]
     }
 
     function NameHolder(userInfo){
         return(
             <div className="nameHolder">
-                <h1>Nombre: {userInfo.user.name}</h1>
-                <h1>Id: {userInfo.user.id}</h1>
-                <button className="delete-button" onClick={handleRemoveFromChat}><Trash2 /></button>
+                <h1>Nombre: {userInfo.user.username}</h1>
+                <h1>Id: {userInfo.user.user_id}</h1>
+                <button className="delete-button" onClick={()=>handleRemoveFromChat(userInfo.user)}><Trash2 /></button>
             </div>
         )
     }
@@ -63,7 +29,7 @@ const KickChatModal = ({handleCreateModalClose, handleCreateModalSend}) =>{
                 <h1>Sacar usuario del chat</h1>
             </div>
             <div className="createChatModal__inputContainer">
-             {testUsers ? (testUsers.map((user) => <NameHolder user={user}/>)) : null}
+             {activeChat.participants ? (activeChat.participants.map((user) => <NameHolder user={user}/>)) : null}
             </div>
             <div className="createChatModal__buttonsContainer">
                 <button className="createChatModal__buttonsContainer__cancelButton" onClick={handleCreateModalClose}>Cancelar</button>

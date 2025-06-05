@@ -39,9 +39,9 @@ const ProfileUpload = () => {
 
       <button onClick={handleSignInCall}>Registrarse</button>
 
-      <NavLink to="/chatRooms">
+      {/* <NavLink to="/chatRooms">
         <button>Siguiente</button>
-      </NavLink>
+      </NavLink> */}
     </div>
   )
 }

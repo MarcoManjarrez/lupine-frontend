@@ -24,7 +24,7 @@ app.post("/addToGroupChat", Chats.addUsersToChar) // 5
 app.post("/sendMessage", Chats.insertMessage)  //6
 app.get("/getChats", Chats.getChats) //7  
 app.get("/getChatMessages", Chats.getChatMessages) //8
-app.get("/getChatInfo", Chats.getChatMessages) //9
+app.get("/getChatInfo", Chats.getChatInfo) //9
 app.delete("/removeFromChat", Chats.deleteUsersFromChat) //10
 app.delete("/exitChat", Chats.deleteChat) //11
 
